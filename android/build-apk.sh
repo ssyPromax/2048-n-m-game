@@ -15,13 +15,21 @@ OUT="${1:-2048n_m.apk}"
 rm -rf "$BUILD"
 mkdir -p "$BUILD/classes"
 
-echo "[1/5] aapt2 link"
+echo "[0/6] 生成图标"
+if ! python3 -c "import PIL" >/dev/null 2>&1; then
+  python3 -m pip install --quiet pillow
+fi
+python3 "$ROOT/../make_icons.py" --android "$ROOT/res"
+
+echo "[1/6] aapt2 link"
+"$BT/aapt2" compile --dir "$ROOT/res" -o "$BUILD/res.zip"
 "$BT/aapt2" link -o "$BUILD/unsigned.apk" \
   -I "$PLATFORM" \
   --min-sdk-version 24 --target-sdk-version 34 \
+  -R "$BUILD/res.zip" \
   --manifest "$ROOT/AndroidManifest.xml"
 
-echo "[2/5] javac"
+echo "[2/6] javac"
 if command -v cygpath >/dev/null 2>&1; then
   find "$ROOT/src" -name '*.java' | cygpath -w -f - > "$BUILD/sources.txt"
 else
@@ -29,10 +37,10 @@ else
 fi
 javac -encoding UTF-8 -classpath "$PLATFORM" -d "$BUILD/classes" @"$BUILD/sources.txt"
 
-echo "[3/5] d8"
+echo "[3/6] d8"
 "$JAVA" -cp "$BT/lib/d8.jar" com.android.tools.r8.D8 --min-api 24 --output "$BUILD" $(find "$BUILD/classes" -name '*.class')
 
-echo "[4/5] 打包 classes.dex"
+echo "[4/6] 打包 classes.dex"
 if command -v zip >/dev/null 2>&1; then
   (cd "$BUILD" && zip -q unsigned.apk classes.dex)
 else
@@ -40,7 +48,7 @@ else
     "$BUILD/unsigned.apk" "$BUILD/classes.dex"
 fi
 
-echo "[5/5] 签名"
+echo "[5/6] 签名"
 if [ ! -f "$BUILD/debug.keystore" ]; then
   keytool -genkeypair -keystore "$BUILD/debug.keystore" -storepass android \
     -alias androiddebugkey -keypass android -dname "CN=2048" \
