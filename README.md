@@ -3,3 +3,5 @@
 n*m的2048小游戏，C++ 编写
 
 使用方向键或WASD移动，按R重开，Esc 退出
+
+Android 版见 android/ 目录
