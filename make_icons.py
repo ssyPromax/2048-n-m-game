@@ -59,8 +59,8 @@ def cover_square(img, size):
 
 def render(size, avatar):
     """渲染一张 size x size 的图标"""
-    # 头像背景 + 虚化
-    bg = cover_square(avatar, size).filter(ImageFilter.GaussianBlur(size / 18.0))
+    # 头像背景 + 轻虚化（保留头像细节）
+    bg = cover_square(avatar, size).filter(ImageFilter.GaussianBlur(size / 48.0))
 
     # 白色半透明蒙版
     mask = Image.new("RGBA", (size, size), (255, 255, 255, MASK_ALPHA))
