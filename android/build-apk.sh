@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 构建 2048(n*m) Android APK（无需 Gradle）
+# 构建 2048n_m Android APK（无需 Gradle）
 # 前提: JDK 17+ 在 PATH 中, ANDROID_SDK_ROOT 指向已安装
 #       "platforms;android-34" 和 "build-tools;34.0.0" 的 SDK
 # 用法: ANDROID_SDK_ROOT=/path/to/sdk ./build-apk.sh [输出文件名]
@@ -10,7 +10,7 @@ SDK="${ANDROID_SDK_ROOT:?请设置 ANDROID_SDK_ROOT 环境变量}"
 BT="$SDK/build-tools/34.0.0"
 PLATFORM="$SDK/platforms/android-34/android.jar"
 JAVA="${JAVA:-java}"
-OUT="${1:-2048nm.apk}"
+OUT="${1:-2048n_m.apk}"
 
 rm -rf "$BUILD"
 mkdir -p "$BUILD/classes"
