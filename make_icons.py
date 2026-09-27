@@ -16,6 +16,13 @@ import os
 import sys
 import urllib.request
 
+# Windows 云端控制台默认 cp1252, 强制 UTF-8 输出避免 UnicodeEncodeError
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 AVATAR_URL = "https://avatars.githubusercontent.com/u/177380592"
