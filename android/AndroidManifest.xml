@@ -3,6 +3,7 @@
     package="com.ssy.game2048">
     <application
         android:label="2048(n*m)"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:allowBackup="true">
         <activity
