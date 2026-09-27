@@ -24,14 +24,14 @@ jobs:
         run: echo "C:/msys64/ucrt64/bin" >> "$GITHUB_PATH"
 
       - name: Build exe
-        run: g++ -O2 -static -mwindows -o 2048nm.exe 2048nm.cpp -lcomctl32
+        run: g++ -O2 -static -mwindows -o "2048(n*m).exe" "2048(n*m).cpp" -lcomctl32
 
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0
-          name: 2048 (N*M) v1.0
+          name: 2048 (n*m) v1.0
           body: |
-            棋盘大小可自定义（2~10）的 2048 Windows 可执行文件（Actions 自动构建）
-            - 2048nm.exe：图形界面版
+            n*m 的 2048 小游戏，Windows 可执行文件（Actions 自动构建）
+            - 2048(n*m).exe：图形界面版
           files: |
-            2048nm.exe
+            "2048(n*m).exe"
