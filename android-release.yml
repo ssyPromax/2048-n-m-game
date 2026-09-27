@@ -1,0 +1,43 @@
+name: Android APK
+
+# 在 exe 的 Release 工作流完成后触发（也可手动运行）
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK
+        run: |
+          mkdir -p "$HOME/android-sdk/cmdline-tools/latest"
+          curl -sL -o /tmp/cmdline.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q /tmp/cmdline.zip -d /tmp/ct
+          mv /tmp/ct/cmdline-tools/* "$HOME/android-sdk/cmdline-tools/latest/"
+          yes | "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$HOME/android-sdk" --licenses > /dev/null
+          "$HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$HOME/android-sdk" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Build APK
+        run: cd android && bash build-apk.sh "2048(n*m).apk"
+        env:
+          ANDROID_SDK_ROOT: /home/runner/android-sdk
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0
+          files: android/2048(n*m).apk
