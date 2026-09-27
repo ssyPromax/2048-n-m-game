@@ -1,4 +1,4 @@
-# 2048 (n*m) - Android 版
+# 2048n_m - Android 版
 
 Android 版 2048：行数 / 列数滑动条（2~10）自定义棋盘，手势滑动移动方块。纯 Java + 系统 API，无第三方依赖，无需 Gradle。
 
@@ -8,7 +8,7 @@ Android 版 2048：行数 / 列数滑动条（2~10）自定义棋盘，手势滑
 
 ```bash
 export ANDROID_SDK_ROOT=/path/to/android-sdk
-bash build-apk.sh "2048(n*m).apk"
+bash build-apk.sh 2048n_m.apk
 ```
 
 构建流程（脚本内可见）：aapt2 打包清单 → javac 编译 → d8 生成 dex → 合成 APK → apksigner 签名。
